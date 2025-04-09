@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户登录 - 个人财务记录</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: "Microsoft YaHei", sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            border-radius: 10px 10px 0 0 !important;
+            padding: 1.5rem;
+        }
+        .btn-primary {
+            transition: all 0.3s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .spin {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white text-center">
+                        <i class="bi bi-cash-coin fs-1 mb-3"></i>
+                        <h3 class="card-title mb-0">个人财务记录系统</h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <h4 class="text-center mb-4"><i class="bi bi-person-circle me-2"></i>用户登录</h4>
+                        
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {% if category == 'success' %}
+                                <i class="bi bi-check-circle-fill me-2"></i>
+                                {% elif category == 'danger' %}
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                {% else %}
+                                <i class="bi bi-info-circle-fill me-2"></i>
+                                {% endif %}
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+                        
+                        <form action="{{ url_for('login') }}" method="post" id="loginForm">
+                            <div class="mb-3">
+                                <label for="username" class="form-label"><i class="bi bi-person me-1"></i>用户名</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                                    <input type="text" class="form-control" id="username" name="username" required autofocus>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="password" class="form-label"><i class="bi bi-lock me-1"></i>密码</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary py-2"><i class="bi bi-box-arrow-in-right me-1"></i>登录</button>
+                            </div>
+                        </form>
+                        
+                        <div class="mt-4 text-center">
+                            <p>没有账号？ <a href="{{ url_for('register') }}" class="text-decoration-none"><i class="bi bi-person-plus me-1"></i>注册</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center text-muted mt-3">
+                    <small>© 2025 个人财务记录系统 | 安全登录</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 添加表单提交动画
+            const loginForm = document.getElementById('loginForm');
+            const loginButton = loginForm.querySelector('button[type="submit"]');
+            
+            loginForm.addEventListener('submit', function(e) {
+                // 添加提交按钮动画效果
+                loginButton.innerHTML = '<i class="bi bi-arrow-repeat me-1 spin"></i>正在登录...';
+                loginButton.disabled = true;
+            });
+            
+            // 自动聚焦用户名输入框
+            document.getElementById('username').focus();
+        });
+    </script>
+</body>
+</html> 
